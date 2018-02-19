@@ -2,11 +2,15 @@ package org;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import org.game.Game;
+import org.game.allGames.twenty48.Twenty48;
 
 /*
  * RG
@@ -22,14 +26,17 @@ public class Arcade
 	public static JPanel curPanel; //Panel to handle inputs and draw
 	public static Dimension fullScreen; //Dimension which stores size of full screen
 	protected static Game curGame; //Current game beeing seen.
+	
+	public static Set<Game> gamesSet;
 
 	public static void main(String[] args)
 	{
 		arcadeFrame = new JFrame("A R C A D E"); //Set up frame
 		arcadeFrame.setExtendedState(JFrame.MAXIMIZED_BOTH); //Max Size
-
 		arcadeFrame.setVisible(true); //Set to visible and get dimension
 		fullScreen = new Dimension((int) arcadeFrame.getSize().getWidth(), (int) arcadeFrame.getSize().getHeight());
+		
+		gamesSet = new HashSet<Game>(getAllGames()); //Creates a HashSet of all the games
 
 		curPanel = new ArcadePanel(); //Instantiate the panel.
 		arcadeFrame.add(curPanel); //Set up panel on frame
@@ -56,6 +63,23 @@ public class Arcade
 	//Scrolls through the games available, using n as a direction
 	public static void scrollGame(int n)
 	{
-		//TODO: Set up a set(?) of Games, and implement method to scroll through it
+		if(n == 1)
+		{
+			
+		}
+		else
+		{
+			
+		}
+	}
+	
+	//Returns an ArrayList of all the Game objects
+	public static ArrayList<Game> getAllGames()
+	{
+		ArrayList<Game> allGames = new ArrayList<Game>();
+		
+		allGames.add(new Twenty48());
+		
+		return allGames;
 	}
 }

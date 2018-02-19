@@ -21,6 +21,9 @@ import javax.swing.JPanel;
 public class ArcadePanel extends JPanel
 {
 	private ArrayList<Button> buttons; //List of buttons
+	private ArrayList<GamePane> gamePanes; //List of GamePanes
+	
+	private GamePane currentPane;
 
 	//Constructor creates handlers and functions
 	public ArcadePanel()
@@ -31,6 +34,7 @@ public class ArcadePanel extends JPanel
 		setFocusable(true);
 		setBackground(Color.black);
 		buttons = new ArrayList<>(); //Instantiate button list
+		gamePanes = new ArrayList<>(); //Instantiate GamePane list
 
 		int dX = 50; //Button drawing variables
 		int dH = 150;
