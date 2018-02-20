@@ -1,6 +1,7 @@
 package org;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
@@ -14,7 +15,8 @@ import java.awt.image.BufferedImage;
 
 public class GamePane
 {
-	private int x, y;					//x and y
+	private final int X_POS;			//Final X position
+	private final int Y_POS;			//Final Y position
 	private final int WIDTH, HEIGHT;	//Final width and height of the GamePane
 	private final int BORDER_WIDTH;		//Final width of the border
 	private String name;				//Name of game for the title
@@ -24,20 +26,19 @@ public class GamePane
 	private BufferedImage pane;			//Buffered image of the pane
 	
 	//Constructor
-	public GamePane(int x, int y, String name)
+	public GamePane(String name)
 	{
 		WIDTH = 500;
 		HEIGHT = 600;
 		BORDER_WIDTH = 10;
-		
-		this.x = x;
-		this.y = y;
+		X_POS = (int) (Arcade.fullScreen.getWidth() / 2 - WIDTH / 2);
+		Y_POS = (int) Arcade.fullScreen.getHeight() / 6;
 		
 		this.name = name;
 		
-		backgroundColor = new Color(0, 255, 0);
-		borderColor = new Color(0, 255, 0);
-		nameColor = new Color(255, 0, 0);
+		backgroundColor = new Color(125, 0, 125, 50);
+		borderColor = new Color(255, 255, 255);
+		nameColor = new Color(255, 255, 255);
 		
 		pane = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_ARGB);
 		
@@ -54,30 +55,31 @@ public class GamePane
 		g.fillRect(0, 0, WIDTH, HEIGHT); 	//Draws the rectangle for the GamePane
 		
 		//Draws the border
-		g.setColor(borderColor);	                    //Sets the border color
-		g.fillRect(BORDER_WIDTH, BORDER_WIDTH, WIDTH - BORDER_WIDTH, HEIGHT - BORDER_WIDTH);         //Top left to bottom left
-		g.fillRect(BORDER_WIDTH, BORDER_WIDTH, WIDTH - BORDER_WIDTH, BORDER_WIDTH);                  //Top left to bottom right
-		g.fillRect(WIDTH - BORDER_WIDTH, BORDER_WIDTH, BORDER_WIDTH, HEIGHT - BORDER_WIDTH);         //Top right to bottom right
-		g.fillRect(HEIGHT - BORDER_WIDTH, WIDTH - BORDER_WIDTH, WIDTH - BORDER_WIDTH, BORDER_WIDTH); //Bottom right to bottom left
+		g.setColor(borderColor);	                    											//Sets the border color
+		g.fillRect(0, 0, BORDER_WIDTH, HEIGHT);         											//Top left to bottom left
+		g.fillRect(0, 0, WIDTH, BORDER_WIDTH);                  									//Top left to top right
+		g.fillRect(WIDTH - BORDER_WIDTH, BORDER_WIDTH, BORDER_WIDTH, HEIGHT - BORDER_WIDTH);        //Top right to bottom right
+		g.fillRect(0, HEIGHT - BORDER_WIDTH, WIDTH,BORDER_WIDTH); 									//Bottom right to bottom left
 		
 		//Draws the title/name of the game
 		g.setColor(nameColor);
+		g.setFont(new Font("Impact", Font.BOLD, 50));			//Fo
 		int titleWidth = g.getFontMetrics().stringWidth(name);	//Gets the width of the game title
 		int mid = 0 + (int) (WIDTH / 2);						//Gets the midpoint of the pane
 		int titleX = mid - (int) (titleWidth / 2); 				//Gets the center location for the title
 		
-		g.drawString(name, titleX, (int) (HEIGHT * 2 / 3));
+		g.drawString(name, titleX, (int) (HEIGHT / 6));
 	}
 	
 	//Return the pane as a bufferedImage
-	public BufferedImage getPane()
+	public void drawPane(Graphics g)
 	{
-	    return pane;
+	    g.drawImage(pane, X_POS, Y_POS, WIDTH, HEIGHT, null);
 	}
 	
 	//Getters
-	public int getX() {return x;}
-	public int getY() {return y;}
+	public int getX() {return X_POS;}
+	public int getY() {return Y_POS;}
 	public int getWidth() {return WIDTH;}
 	public int getHeight() {return HEIGHT;}
 	public int getBorderWidth() {return BORDER_WIDTH;}
@@ -87,8 +89,6 @@ public class GamePane
 	public Color getNameColor() {return nameColor;}
 	
 	//Setters
-	public void setX(int x) {this.x = x;}
-	public void setY(int y) {this.y = y;}
 	public void setName(String name) {this.name = name;}
 	public void setBackroundColor(Color backgroundColor) {this.backgroundColor = backgroundColor;}
 	public void setBorderColor(Color borderColor) {this.borderColor = borderColor;}

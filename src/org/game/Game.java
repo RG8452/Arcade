@@ -1,5 +1,6 @@
 package org.game;
 
+import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
@@ -27,5 +28,5 @@ public abstract class Game
 
 	public abstract JPanel getPanel(); //Retrieves the preferred panel for the game drawing & controls
 	
-	public abstract BufferedImage getPane(); //Retrieves the game preview pane
+	public abstract void getPane(Graphics g); //Retrieves the game preview pane
 }

@@ -1,5 +1,6 @@
 package org.game.twenty48;
 
+import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
@@ -14,7 +15,7 @@ public class Twenty48 extends Game
     
     public Twenty48()
     {
-        pane = new GamePane(500, 500, "2048");
+        pane = new GamePane("2048");
     }
     
 	@Override
@@ -50,9 +51,8 @@ public class Twenty48 extends Game
 		return tPanel;
 	}
 	
-	public BufferedImage getPane()
+	public void getPane(Graphics g)
 	{
-	    return pane.getPane();
+	    pane.drawPane(g);
 	}
-	
 }

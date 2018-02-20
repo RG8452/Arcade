@@ -26,8 +26,9 @@ public class Arcade
 	public static JPanel curPanel; //Panel to handle inputs and draw
 	public static Dimension fullScreen; //Dimension which stores size of full screen
 	protected static Game curGame; //Current game beeing seen.
+	public static int curGameIndex;
 	
-	public static Set<Game> gamesSet;
+	public static ArrayList<Game> allGames;
 
 	public static void main(String[] args)
 	{
@@ -36,7 +37,8 @@ public class Arcade
 		arcadeFrame.setVisible(true); //Set to visible and get dimension
 		fullScreen = new Dimension((int) arcadeFrame.getSize().getWidth(), (int) arcadeFrame.getSize().getHeight());
 		
-		gamesSet = new HashSet<Game>(getAllGames()); //Creates a HashSet of all the games
+		allGames = new ArrayList<Game>(); //Creates an array of all the games
+		addAllGames();
 
 		curPanel = new ArcadePanel(); //Instantiate the panel.
 		arcadeFrame.add(curPanel); //Set up panel on frame
@@ -63,23 +65,32 @@ public class Arcade
 	//Scrolls through the games available, using n as a direction
 	public static void scrollGame(int n)
 	{
-		if(n == 1)
+		if(curGameIndex + n + 1 > allGames.size())
 		{
-			
+			curGameIndex = 0;
+		}
+		else if(n == 1)
+		{
+			curGameIndex += 1;
+			System.out.println("Scroll 1");
 		}
 		else
 		{
-			
+			curGameIndex -=1;
+			System.out.println("Scroll - 1");
 		}
 	}
 	
 	//Returns an ArrayList of all the Game objects
-	public static ArrayList<Game> getAllGames()
-	{
-		ArrayList<Game> allGames = new ArrayList<Game>();
-		
+	public static void addAllGames()
+	{	
 		allGames.add(new Twenty48());
-		
-		return allGames;
+		allGames.add(new Twenty48());
+		allGames.add(new Twenty48());
+		allGames.add(new Twenty48());
+		allGames.add(new Twenty48());
+		allGames.add(new Twenty48());
+		curGame = allGames.get(0);		//Current game is set to 0 as default
+		curGameIndex = 0;
 	}
 }

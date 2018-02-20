@@ -93,7 +93,7 @@ public class ArcadePanel extends JPanel
 			b.drawButtonBorder(g);
 		}
 		
-		//g.drawImage(test.getPane(), 500, 500, 500, 600, null);
+		Arcade.allGames.get(Arcade.curGameIndex).getPane(g);
 				
 		g.setFont(new Font("TimesRoman", Font.BOLD, 50)); //Paint the word "PLAY"
 		g.setColor(Color.white);
