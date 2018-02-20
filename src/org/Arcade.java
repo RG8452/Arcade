@@ -10,7 +10,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import org.game.Game;
-import org.game.allGames.twenty48.Twenty48;
+import org.game.twenty48.Twenty48;
 
 /*
  * RG

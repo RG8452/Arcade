@@ -11,6 +11,9 @@ import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
+import org.game.Game;
+import org.game.twenty48.Twenty48;
+
 /*
  * RG
  * This panel is the one that will display on the Arcade frame
@@ -22,6 +25,7 @@ public class ArcadePanel extends JPanel
 {
 	private ArrayList<Button> buttons; //List of buttons
 	private ArrayList<GamePane> gamePanes; //List of GamePanes
+	Game test;
 	
 	private GamePane currentPane;
 
@@ -35,6 +39,8 @@ public class ArcadePanel extends JPanel
 		setBackground(Color.black);
 		buttons = new ArrayList<>(); //Instantiate button list
 		gamePanes = new ArrayList<>(); //Instantiate GamePane list
+		
+		test = new Twenty48();
 
 		int dX = 50; //Button drawing variables
 		int dH = 150;
@@ -81,12 +87,14 @@ public class ArcadePanel extends JPanel
 	{
 		super.paintComponent(g);
 
-		for (Button b : buttons) //Draws outline & inside of all buttons
+		for(Button b : buttons) //Draws outline & inside of all buttons
 		{
 			b.drawButton(g);
 			b.drawButtonBorder(g);
 		}
-
+		
+		//g.drawImage(test.getPane(), 500, 500, 500, 600, null);
+				
 		g.setFont(new Font("TimesRoman", Font.BOLD, 50)); //Paint the word "PLAY"
 		g.setColor(Color.white);
 		buttons.get(2).drawMessage(g, "PLAY");

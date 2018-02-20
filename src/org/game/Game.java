@@ -4,6 +4,8 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
 
+import org.GamePane;
+
 /*
  * RG
  * This is the abstract Game class that all of the games will extend
@@ -24,4 +26,6 @@ public abstract class Game
 	public abstract void reset(); //Resets all game data
 
 	public abstract JPanel getPanel(); //Retrieves the preferred panel for the game drawing & controls
+	
+	public abstract BufferedImage getPane(); //Retrieves the game preview pane
 }
