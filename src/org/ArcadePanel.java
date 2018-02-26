@@ -11,9 +11,6 @@ import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
-import org.game.Game;
-import org.game.twenty48.Twenty48;
-
 /*
  * RG
  * This panel is the one that will display on the Arcade frame
@@ -24,10 +21,6 @@ import org.game.twenty48.Twenty48;
 public class ArcadePanel extends JPanel
 {
 	private ArrayList<Button> buttons; //List of buttons
-	private ArrayList<GamePane> gamePanes; //List of GamePanes
-	Game test;
-	
-	private GamePane currentPane;
 
 	//Constructor creates handlers and functions
 	public ArcadePanel()
@@ -38,9 +31,6 @@ public class ArcadePanel extends JPanel
 		setFocusable(true);
 		setBackground(Color.black);
 		buttons = new ArrayList<>(); //Instantiate button list
-		gamePanes = new ArrayList<>(); //Instantiate GamePane list
-		
-		test = new Twenty48();
 
 		int dX = 50; //Button drawing variables
 		int dH = 150;
@@ -87,14 +77,14 @@ public class ArcadePanel extends JPanel
 	{
 		super.paintComponent(g);
 
-		for(Button b : buttons) //Draws outline & inside of all buttons
+		for (Button b : buttons) //Draws outline & inside of all buttons
 		{
 			b.drawButton(g);
 			b.drawButtonBorder(g);
 		}
-		
-		Arcade.allGames.get(Arcade.curGameIndex).getPane(g);
-				
+
+		Arcade.curGame.getPane(g); //Draws game pane
+
 		g.setFont(new Font("TimesRoman", Font.BOLD, 50)); //Paint the word "PLAY"
 		g.setColor(Color.white);
 		buttons.get(2).drawMessage(g, "PLAY");
@@ -111,6 +101,8 @@ public class ArcadePanel extends JPanel
 				case (KeyEvent.VK_SPACE): //SPACE begins playing currently selected game
 					Arcade.curGame.start();
 					Arcade.switchPanel(Arcade.curGame.getPanel());
+					Arcade.frameDelay = 1000 / (Arcade.curGame.getFrameRate());
+					Arcade.runGame();
 					break;
 				case (KeyEvent.VK_RIGHT): //RIGHT scrolls to the next game
 					Arcade.scrollGame(1);
@@ -137,6 +129,8 @@ public class ArcadePanel extends JPanel
 						case "Play": //If you clicked play
 							Arcade.curGame.start(); //Begin the game
 							Arcade.switchPanel(Arcade.curGame.getPanel()); //Swap panels
+							Arcade.frameDelay = 1000 / (Arcade.curGame.getFrameRate());
+							Arcade.runGame();
 							break;
 						case "Right": //If you clicked right
 							Arcade.scrollGame(1);
