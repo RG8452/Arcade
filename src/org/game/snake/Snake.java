@@ -24,6 +24,9 @@ public class Snake extends Game
 	protected Point applePoint; //The point where the apple is located
 	private int extendLength = 0; //Variable which will help with extending the snake
 	private boolean acted = false; //Boolean which shows if dir has already been changed this frame
+	private boolean doubleRefresh = false; //Refreshes the acted variable twice the speed of action
+	public int score = 0;	//Score earned, equivalent to length of snake
+	public double seconds = 0; //Time passed in seconds
 
 	private enum DIRECTION //Enum for all possible movement directions
 	{
@@ -37,7 +40,7 @@ public class Snake extends Game
 	{
 		snakePanel = new SnakePanel();
 		pane = new GamePane("Snake");
-		frameRate = 10;
+		frameRate = 35;
 	}
 
 	@Override
@@ -51,6 +54,20 @@ public class Snake extends Game
 	@Override
 	public void run()
 	{
+		seconds += 1/(double)frameRate;
+		if (doubleRefresh)
+		{
+			acted = false;
+			doubleRefresh = false;
+			return;
+		}
+		else
+		{
+			acted = false;
+			doubleRefresh = true;
+		}
+
+		score = pieceLocations.size();
 		if (gameOverCheck()) //If Game Over, then end the game.
 		{
 			end();
@@ -85,7 +102,7 @@ public class Snake extends Game
 		if ((int) pieceLocations.get(0).getX() == (int) applePoint.getX() && (int) pieceLocations.get(0).getY() == (int) applePoint.getY())
 		{
 			randomizeApple();
-			extendLength += 3;
+			extendLength += 4;
 		}
 
 		acted = false;
@@ -102,7 +119,7 @@ public class Snake extends Game
 				//Check collision/intersection with any piece of the snake
 				for (int loop = 1; loop < pieceLocations.size(); loop++)
 				{
-					if ((int) (pieceLocations.get(loop).getX()) == (int) (pieceLocations.get(0).getX() + 1)) 
+					if ((int) (pieceLocations.get(loop).getX()) == (int) (pieceLocations.get(0).getX() + 1))
 					{
 						if ((int) (pieceLocations.get(loop).getY()) == (int) (pieceLocations.get(0).getY())) return true;
 					}
@@ -112,7 +129,7 @@ public class Snake extends Game
 				if (pieceLocations.get(0).getX() - 1 < 0) return true;
 				for (int loop = 1; loop < pieceLocations.size(); loop++)
 				{
-					if ((int) (pieceLocations.get(loop).getX()) == (int) (pieceLocations.get(0).getX() - 1)) 
+					if ((int) (pieceLocations.get(loop).getX()) == (int) (pieceLocations.get(0).getX() - 1))
 					{
 						if ((int) (pieceLocations.get(loop).getY()) == (int) (pieceLocations.get(0).getY())) return true;
 					}
@@ -122,7 +139,7 @@ public class Snake extends Game
 				if (pieceLocations.get(0).getY() - 1 < 0) return true;
 				for (int loop = 1; loop < pieceLocations.size(); loop++)
 				{
-					if ((int) (pieceLocations.get(loop).getY()) == (int) (pieceLocations.get(0).getY() - 1)) 
+					if ((int) (pieceLocations.get(loop).getY()) == (int) (pieceLocations.get(0).getY() - 1))
 					{
 						if ((int) (pieceLocations.get(loop).getX()) == (int) (pieceLocations.get(0).getX())) return true;
 					}
@@ -132,7 +149,7 @@ public class Snake extends Game
 				if (pieceLocations.get(0).getY() + 1 >= dotsPerSide) return true;
 				for (int loop = 1; loop < pieceLocations.size(); loop++)
 				{
-					if ((int) (pieceLocations.get(loop).getY()) == (int) (pieceLocations.get(0).getY() + 1)) 
+					if ((int) (pieceLocations.get(loop).getY()) == (int) (pieceLocations.get(0).getY() + 1))
 					{
 						if ((int) (pieceLocations.get(loop).getX()) == (int) (pieceLocations.get(0).getX())) return true;
 					}
@@ -175,28 +192,59 @@ public class Snake extends Game
 	//Randomizes apple coords
 	private void randomizeApple()
 	{
-		applePoint = new Point((int) (Math.random() * dotsPerSide), (int) (Math.random() * dotsPerSide)); //Random apple coords
+		do
+		{
+			applePoint = new Point((int) (Math.random() * dotsPerSide), (int) (Math.random() * dotsPerSide)); //Random apple coords
+		} while (appleIntersection());
+	}
+
+	//Returns true if the apple is randomized into the snake
+	private boolean appleIntersection()
+	{
+		for (int zz = 1; zz < pieceLocations.size(); zz++)
+		{
+			if ((int) pieceLocations.get(zz).getX() == (int) applePoint.getX())
+			{
+				if ((int) pieceLocations.get(zz).getY() == (int) applePoint.getY()) { return true; }
+			}
+		}
+		return false;
 	}
 
 	//Sets the direction of the snake based on c, with different chars being different dirs
 	public void setDirection(char c)
 	{
 		if (acted) return; //Boolean forces the player to only change direction once per frame
-		else acted = true;
 
 		switch (c) //You can turn in any direction, so long as it isn't opposite direction of motion
 		{
 			case 'R':
-				if (!(direction == DIRECTION.LEFT)) direction = DIRECTION.RIGHT;
+				if (!(direction == DIRECTION.LEFT) && (int)pieceLocations.get(0).getX() + 1 != (int)pieceLocations.get(1).getX()) 
+				{
+					acted = true;
+					direction = DIRECTION.RIGHT;
+				}
 				break;
 			case 'L':
-				if (!(direction == DIRECTION.RIGHT)) direction = DIRECTION.LEFT;
+				if (!(direction == DIRECTION.RIGHT) && (int)pieceLocations.get(0).getX() - 1 != (int)pieceLocations.get(1).getX()) 
+				{
+					acted = true;
+					direction = DIRECTION.LEFT;
+				}
 				break;
 			case 'D':
-				if (!(direction == DIRECTION.UP)) direction = DIRECTION.DOWN;
+				if (!(direction == DIRECTION.UP) && (int)pieceLocations.get(0).getY() + 1 != (int)pieceLocations.get(1).getY()) 
+				{
+					acted = true;
+					direction = DIRECTION.DOWN;
+				}
 				break;
 			case 'U':
-				if (!(direction == DIRECTION.DOWN)) direction = DIRECTION.UP;
+				if (!(direction == DIRECTION.DOWN) && (int)pieceLocations.get(0).getY() - 1 != (int)pieceLocations.get(1).getY()) 
+				{
+					acted = true;
+					direction = DIRECTION.UP;
+				}
 				break;
 		}
 	}
