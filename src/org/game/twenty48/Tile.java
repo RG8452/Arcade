@@ -38,6 +38,11 @@ public class Tile
         drawTile();
     }
     
+    public void getTileImage(Graphics g)
+    {
+    	g.drawImage(tileImage, x, y, null);
+    }
+    
     private void drawTile()
     {
         Graphics g =  tileImage.getGraphics();
