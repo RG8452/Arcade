@@ -10,18 +10,20 @@ import org.game.GamePane;
 
 public class Twenty48 extends Game
 {
-	private Twenty48Panel tPanel;
-	private GamePane pane;
+	private Twenty48Panel twenty48Panel;
+	private GamePane twenty48Pane;
 
 	public Twenty48()
 	{
-		pane = new GamePane("2048");
+	    twenty48Panel = new Twenty48Panel();
+		twenty48Pane = new GamePane("2048");
+		frameRate = 60;
 	}
 
 	@Override
 	public void start()
 	{
-		tPanel = new Twenty48Panel();
+	    finished = false;
 	}
 
 	@Override
@@ -45,11 +47,11 @@ public class Twenty48 extends Game
 	@Override
 	public JPanel getPanel()
 	{
-		return tPanel;
+		return twenty48Panel;
 	}
 
 	public void getPane(Graphics g)
 	{
-		pane.drawPane(g);
+		twenty48Pane.drawPane(g);
 	}
 }
