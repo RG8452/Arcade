@@ -9,6 +9,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import org.game.Game;
+import org.game.brickbreaker.BrickBreaker;
 import org.game.snake.Snake;
 import org.game.twenty48.Twenty48;
 
@@ -99,6 +100,7 @@ public class Arcade
 	{
 		allGames.add(new Twenty48());
 		allGames.add(new Snake());
+		allGames.add(new BrickBreaker());
 		curGame = allGames.get(0); //Current game is set to 0 as default
 		curGameIndex = 0;
 	}
