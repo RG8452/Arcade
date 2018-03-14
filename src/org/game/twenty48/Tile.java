@@ -29,7 +29,7 @@ public class Tile
         this.value = value;
         this.x = x;
         this.y = y;
-        
+                
         font = new Font("", Font.BOLD, 72);
         trippleDigit = new Font("", Font.BOLD, 54);
         quadDigit = new Font("", Font.BOLD, 45);
@@ -39,7 +39,8 @@ public class Tile
     }
     
     public void getTileImage(Graphics g)
-    {
+    {   
+        drawTile();
     	g.drawImage(tileImage, x, y, null);
     }
     
@@ -163,7 +164,7 @@ public class Tile
     
     public int getValue()
     {
-        return x;
+        return value;
     }
     
     //Setters
@@ -179,6 +180,6 @@ public class Tile
     
     public void setValue(int value)
     {
-        this.value = x;
+        this.value = value;
     }
 }

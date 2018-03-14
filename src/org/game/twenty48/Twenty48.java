@@ -16,7 +16,6 @@ public class Twenty48 extends Game
 	private Twenty48Panel twenty48Panel;		//The main game JPanel
 	private GamePane twenty48Pane;				//The game pane for this game
 
-	private ArrayList<ArrayList<Tile>> tiles;	//2D ArrayList of all the Tile objects
 	
 	//Constructor
 	public Twenty48()
@@ -25,20 +24,20 @@ public class Twenty48 extends Game
 		twenty48Pane = new GamePane("2048");
 
 		frameRate = 60;
+		
+	   // reset();
 	}
 
 	//Game start function
 	public void start()
 	{
 	    finished = false;
-	    tiles = new ArrayList<ArrayList<Tile>>();
-	    reset();
 	}
 	
 	//Main run method of this game
 	public void run()
 	{
-
+	    
 	}
 
 	//Method called when the game ends
@@ -50,22 +49,9 @@ public class Twenty48 extends Game
 	//Resets the game
 	public void reset()
 	{
-		for(int x = 0; x < 4; x++)
-		{
-			tiles.add(new ArrayList<Tile>());
-			
-			for(int y = 0; y < 4; y++)
-			{
-				tiles.get(x).add(new Tile(0, 50, 50));
-			}
-		}
+	    twenty48Panel.restart();
 	}
 
-	public ArrayList<ArrayList<Tile>> getTiles()
-	{
-		return tiles;
-	}
-	
 	//Returns the JPanel of the game
 	public JPanel getPanel()
 	{
