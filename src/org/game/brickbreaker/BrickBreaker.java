@@ -16,12 +16,13 @@ public class BrickBreaker extends Game
     public BrickBreaker()
     {
         pane = new GamePane("Brick Breaker");
+        bPanel = new BrickBreakerPanel();
     }
 
     @Override
     public void start()
     {
-        bPanel = new BrickBreakerPanel();
+       
     }
 
     @Override

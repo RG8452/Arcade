@@ -22,15 +22,21 @@ public class BrickBreakerPanel extends JPanel
     //Paddle variables
     private static final int PADDLE_WIDTH = 100;
     private static final int PADDLE_HEIGHT = 15;
-    private static final int PADDLE_X_POS = (X_POS + BORDER_WIDTH / 2 - (PADDLE_WIDTH / 2));
-    private static final int PADDLE_Y_POS = (Y_POS + BORDER_HEIGHT - 30 - (PADDLE_HEIGHT / 2));;
+    private static int paddleXPos = (X_POS + BORDER_WIDTH / 2 - (PADDLE_WIDTH / 2));
+    private static int paddleYPos = (Y_POS + BORDER_HEIGHT - 30 - (PADDLE_HEIGHT / 2));;
     
     //Ball variables
     private static final int BALL_WIDTH = 20;
     private static final int BALL_HEIGHT = 20;
-    private static final int BALL_X_POS = (PADDLE_X_POS + PADDLE_WIDTH / 2 - BALL_WIDTH / 2);
-    private static final int BALL_Y_POS = (PADDLE_Y_POS - BALL_HEIGHT);
+    private static int ballXPos = (paddleXPos + PADDLE_WIDTH / 2 - BALL_WIDTH / 2);
+    private static int ballYPos = (paddleYPos - BALL_HEIGHT);
     
+    private static final int SPACING = 5;
+    private static final int ROWS = 15;
+    private static final int COLS = 25;
+    
+    
+    private Bricks[][] brickList = new Bricks[ROWS][COLS];
     
     private static final long serialVersionUID = 1L;
     private double scale = 4; //The scale of the box that holds the game; the bigger the number, the bigger the box
@@ -43,14 +49,23 @@ public class BrickBreakerPanel extends JPanel
         addMouseListener(handler);
         setFocusable(true);
         setBackground(Color.green); //sets background color to green
+        
+        for(int rows = 0; rows < ROWS; rows++)
+        {
+            for (int cols = 0; cols < COLS; cols++)
+            {
+                int x = SPACING + SPACING * cols + Bricks.WIDTH * cols + X_POS + 10;
+                int y = SPACING + SPACING * rows + Bricks.HEIGHT * rows + Y_POS + Bricks.HEIGHT * 2;
+                brickList[rows][cols] = new Bricks(x, y, 1, 0);
+                System.out.println(x + " " + y);
+            }
+        }
+     
     }
 
     protected void paintComponent(Graphics g)
     {
         super.paintComponent(g); //Repaint super JPanel
-        
-        int leftX = (int)(Arcade.fullScreen.width/scale), topY = (int)((Arcade.fullScreen.height >> 1) - ((Arcade.fullScreen.width>>1)-leftX)); //TL coords
-        int boxSide = Arcade.fullScreen.width - (leftX<<1); //The box will be a square with this as a side length
         
         //draws the background border in white
         g.setColor(Color.white);
@@ -62,10 +77,21 @@ public class BrickBreakerPanel extends JPanel
 
         //draws the paddle in gray color
         g.setColor(Color.gray);
-        g.fillRoundRect(PADDLE_X_POS, PADDLE_Y_POS, PADDLE_WIDTH, PADDLE_HEIGHT, 10, 10);
+        g.fillRoundRect(paddleXPos, paddleYPos, PADDLE_WIDTH, PADDLE_HEIGHT, 10, 10);
         
+        //draws the ball in red color
         g.setColor(Color.red);
-        g.fillOval(BALL_X_POS, BALL_Y_POS, BALL_WIDTH, BALL_HEIGHT);
+        g.fillOval(ballXPos, ballYPos, BALL_WIDTH, BALL_HEIGHT);
+        
+        
+        for(int rows = 0; rows < ROWS; rows++)
+        {
+            for (int cols = 0; cols < COLS; cols++)
+            {
+                brickList[rows][cols].drawBrickImage(g);
+                
+            }
+        }
     }
 
     private class BrickBreakerHandler implements KeyListener, MouseListener
