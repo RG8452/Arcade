@@ -28,7 +28,7 @@ public class Bricks {
     }
     
     
-    private void drawBrick()
+    private void drawBrick() //a method that draws a brick onto the buffered image
     {
         Graphics g = brickImage.getGraphics();
         
@@ -36,9 +36,8 @@ public class Bricks {
         g.fillRect(0, 0, WIDTH, HEIGHT);
     }
     
-    public void drawBrickImage(Graphics g)
+    public void drawBrickImage(Graphics g) //draws the buffered image
     {
-        System.out.println("Brick at: X: " + x + ", " + " Y: " + y + " ");
         g.drawImage(brickImage, x, y, null);
     }
     

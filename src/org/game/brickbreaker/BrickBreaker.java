@@ -17,12 +17,14 @@ public class BrickBreaker extends Game
     {
         pane = new GamePane("Brick Breaker");
         bPanel = new BrickBreakerPanel();
+        
+        frameRate = 60;
     }
 
     @Override
     public void start()
     {
-       
+       finished = false;
     }
 
     @Override
@@ -40,7 +42,7 @@ public class BrickBreaker extends Game
     @Override
     public void reset()
     {
-
+        
     }
 
     @Override
