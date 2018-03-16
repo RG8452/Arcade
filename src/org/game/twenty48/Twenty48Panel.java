@@ -159,12 +159,60 @@ public class Twenty48Panel extends JPanel
 	        switch(direction)
 	        {
 	            case "up":
+	            	if(row > 0)
+		            	if(tiles[row - 1][col].getValue() == 0)
+		            	{
+		            		tiles[row - 1][col].setValue(addTo.getValue());
+		            		addTo.setValue(0);
+		            		if(row >= 2)
+			            		if(tiles[row - 2][col].getValue() == 0)
+			            		{
+			            			tiles[row - 2][col].setValue(addTo.getValue());
+			            			addTo.setValue(0);
+			            		}
+		            	}
 	                break;
 	            case "down":
+	            	if(row < 3)
+		            	if(tiles[row + 1][col].getValue() == 0)
+		            	{
+		            		tiles[row + 1][col].setValue(addTo.getValue());
+		            		addTo.setValue(0);
+		            		if(row < 2)
+			            		if(tiles[row + 2][col].getValue() == 0)
+			            		{
+			            			tiles[row + 2][col].setValue(addTo.getValue());
+			            			addTo.setValue(0);
+			            		}
+		            	}
 	                break;
 	            case "left":
+	            	if(col > 0)
+		            	if(tiles[row][col - 1].getValue() == 0)
+		            	{
+		            		tiles[row][col - 1].setValue(addTo.getValue());
+		            		addTo.setValue(0);
+		            		if(col >= 2)
+			            		if(tiles[row][col - 2].getValue() == 0)
+			            		{
+			            			tiles[row][col - 2].setValue(addTo.getValue());
+			            			addTo.setValue(0);
+			            		}
+		            	}
 	                break;
 	            case "right":
+	            	if(col < 3)
+		            	if(tiles[row][col + 1].getValue() == 0)
+		            	{
+		            		tiles[row][col + 1].setValue(addTo.getValue());
+		            		addTo.setValue(0);
+		            		if(col < 2)
+			            		if(tiles[row][col + 2].getValue() == 0)
+			            		{
+			            			tiles[row][col + 2].setValue(addTo.getValue());
+			            			addTo.setValue(0);
+			            		}
+		            	}
 	                break;
 	        }
 	        

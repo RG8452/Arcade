@@ -15,13 +15,14 @@ public class Tile
     public static final int HEIGHT = 125;
     
     private Color tileColor;
-    private Color textColor;
+    private Color textColor;		
     private Font font;              //Default font for the tiles
     private Font trippleDigit;      //Font for triple digit numbers
     private Font quadDigit;         //Font for quad digit numbers
     private int value;              //Value of the tile
     private int x;                  //X position
     private int y;                  //Y position
+    private boolean hasMoved;		//True == tile has moved, or been added, false == has stayed in the same spot
     private BufferedImage tileImage;
     
     public Tile(int value, int x, int y)
@@ -33,6 +34,8 @@ public class Tile
         font = new Font("", Font.BOLD, 72);
         trippleDigit = new Font("", Font.BOLD, 54);
         quadDigit = new Font("", Font.BOLD, 45);
+        
+        hasMoved = false;
         
         tileImage = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
         drawTile();
@@ -167,6 +170,11 @@ public class Tile
         return value;
     }
     
+    public boolean hasMoved()
+    {
+    	return hasMoved;
+    }
+    
     //Setters
     public void setY(int y)
     {
@@ -181,5 +189,10 @@ public class Tile
     public void setValue(int value)
     {
         this.value = value;
+    }
+    
+    public void setHasMoved(boolean hasMoved)
+    {
+    	this.hasMoved = hasMoved;
     }
 }

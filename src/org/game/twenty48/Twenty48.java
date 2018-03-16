@@ -1,7 +1,6 @@
 package org.game.twenty48;
 
 import java.awt.Graphics;
-import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
