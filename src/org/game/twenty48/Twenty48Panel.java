@@ -156,6 +156,18 @@ public class Twenty48Panel extends JPanel
 	        addTo.setValue(toBeAdded.getValue());
 	        toBeAdded.setValue(0);
 	        
+	        switch(direction)
+	        {
+	            case "up":
+	                break;
+	            case "down":
+	                break;
+	            case "left":
+	                break;
+	            case "right":
+	                break;
+	        }
+	        
 	    }
 	    if(addTo.getValue() == toBeAdded.getValue())
 	    {
