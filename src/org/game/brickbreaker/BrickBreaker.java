@@ -18,7 +18,7 @@ public class BrickBreaker extends Game
         pane = new GamePane("Brick Breaker");
         bPanel = new BrickBreakerPanel();
         
-        frameRate = 60;
+        frameRate = 1000000;
     }
 
     @Override

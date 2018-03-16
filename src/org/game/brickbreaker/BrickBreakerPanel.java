@@ -7,6 +7,8 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.swing.JPanel;
 
@@ -41,12 +43,35 @@ public class BrickBreakerPanel extends JPanel
     private static final int COLS = 25;
     private int mouseX = paddleXPos;
     
-    
+    //Ball timer
+    Timer timer = new Timer();
+    TimerTask task = new TimerTask()
+    		{
+    			public void run()
+    			{
+    				ballXPos += ballXDir;;
+    				ballYPos += ballYDir;
+    				
+    				 if(ballXPos > X_POS + BORDER_WIDTH || ballXPos < X_POS)
+    		            {
+    		                ballXDir *= -1;
+    		            }
+    		            
+    		            if(ballYPos < Y_POS)
+    		            {
+    		                ballYDir *= -1;
+    		            }
+    		            
+    		            if(ballYPos > Y_POS + BORDER_HEIGHT)
+    		            {
+    		            	timer.cancel();
+    		            }
+    			}
+    		};
+    		
     private Bricks[][] brickList = new Bricks[ROWS][COLS];//creates an array of type Bricks
     
     private static final long serialVersionUID = 1L;
-    private double scale = 4; //The scale of the box that holds the game; the bigger the number, the bigger the box
-    
     
     
     public BrickBreakerPanel()  //Constructor
@@ -57,6 +82,7 @@ public class BrickBreakerPanel extends JPanel
         addMouseMotionListener(handler);
         setFocusable(true);
         setBackground(Color.green); //sets background color to green
+        
         
         
         //adds all the objects to the array
@@ -81,27 +107,8 @@ public class BrickBreakerPanel extends JPanel
     
     private void moveBall() 
     {
-        while(ballMoving)
-        {
-            ballXPos += ballXDir;
-            System.out.println(ballXPos);
-            ballYPos += ballYDir;
-            System.out.println(ballYPos);
-            if(ballXPos > X_POS + BORDER_WIDTH || ballXPos < X_POS)
-            {
-                ballXDir *= -1;
-            }
-            
-            if(ballYPos < Y_POS)
-            {
-                ballYDir *= -1;
-            }
-            
-            if(ballYPos > Y_POS + BORDER_HEIGHT)
-            {
-                setBallMoving(false);
-            }
-        }
+        	timer.scheduleAtFixedRate(task, 13, 13);
+           
     }
 
     protected void paintComponent(Graphics g)
@@ -152,8 +159,8 @@ public class BrickBreakerPanel extends JPanel
                     if(!ballMoving)
                     {
                         ballMoving = true;
-                        ballXDir = (int) (Math.random() * 20 + (-10));
-                        ballYDir = 8;
+                        ballXDir = (int) (Math.random() * 10 + (-5));
+                        ballYDir = -5;
                         moveBall();
                         System.out.println("Ball is moving");
                     }
