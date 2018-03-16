@@ -26,12 +26,12 @@ public class BrickBreakerPanel extends JPanel
     private static final int PADDLE_WIDTH = 100;
     private static final int PADDLE_HEIGHT = 15;
     private static int paddleXPos = (X_POS + BORDER_WIDTH / 2 - (PADDLE_WIDTH / 2));
-    private static int paddleYPos = (Y_POS + BORDER_HEIGHT - 30 - (PADDLE_HEIGHT / 2));;
+    private static final int PADDLE_Y_POS = (Y_POS + BORDER_HEIGHT - 30 - (PADDLE_HEIGHT / 2));;
     
     //Ball variables
     private static final int BALL_WIDTH = 20;
     private static final int BALL_HEIGHT = 20;
-    private static int ballYPos = (paddleYPos - BALL_HEIGHT);
+    private static int ballYPos = (PADDLE_Y_POS - BALL_HEIGHT);
     private static int ballXPos = (paddleXPos + PADDLE_WIDTH / 2 - BALL_WIDTH / 2);
     private int ballXDir;
     private int ballYDir;
@@ -52,17 +52,23 @@ public class BrickBreakerPanel extends JPanel
     				ballXPos += ballXDir;;
     				ballYPos += ballYDir;
     				
-    				 if(ballXPos > X_POS + BORDER_WIDTH || ballXPos < X_POS)
+    				 if(ballXPos + BALL_WIDTH > X_POS + BORDER_WIDTH - 10 || ballXPos < X_POS + 10)
     		            {
     		                ballXDir *= -1;
     		            }
     		            
-    		            if(ballYPos < Y_POS)
+    				 if(ballYPos + BALL_HEIGHT > PADDLE_Y_POS && ballXPos + BALL_WIDTH + 1 > paddleXPos && ballXPos - 1 < paddleXPos + PADDLE_WIDTH)
+                     {
+                         ballYDir *= -1;
+                     }
+    				 
+    		            if(ballYPos < Y_POS + 10)
     		            {
     		                ballYDir *= -1;
     		            }
     		            
-    		            if(ballYPos > Y_POS + BORDER_HEIGHT)
+    		            
+    		            if(ballYPos + BALL_HEIGHT > Y_POS + BORDER_HEIGHT - 10)
     		            {
     		            	timer.cancel();
     		            }
@@ -125,7 +131,7 @@ public class BrickBreakerPanel extends JPanel
 
         //draws the paddle in gray color
         g.setColor(Color.gray);
-        g.fillRoundRect(paddleXPos - PADDLE_WIDTH / 2, paddleYPos, PADDLE_WIDTH, PADDLE_HEIGHT, 10, 10);
+        g.fillRoundRect(paddleXPos, PADDLE_Y_POS, PADDLE_WIDTH, PADDLE_HEIGHT, 10, 10);
         
         //draws the ball in red color
         g.setColor(Color.red);
@@ -162,7 +168,6 @@ public class BrickBreakerPanel extends JPanel
                         ballXDir = (int) (Math.random() * 10 + (-5));
                         ballYDir = -5;
                         moveBall();
-                        System.out.println("Ball is moving");
                     }
             }
         }
@@ -175,7 +180,7 @@ public class BrickBreakerPanel extends JPanel
             if(mouseX < X_POS + 10 + PADDLE_WIDTH / 2)  //makes sure the paddle doesn't go past the border on the left side
                 paddleXPos = X_POS + 10 + PADDLE_WIDTH / 2;
             else
-                paddleXPos = mouseX;
+                paddleXPos = mouseX - PADDLE_WIDTH / 2;
             
             if(mouseX > X_POS + BORDER_WIDTH - 10 - PADDLE_WIDTH / 2) //makes sure the paddle doesn't go past the border on the right side
                 paddleXPos = X_POS + BORDER_WIDTH - 10- PADDLE_WIDTH / 2;
