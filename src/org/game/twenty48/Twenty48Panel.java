@@ -19,22 +19,23 @@ public class Twenty48Panel extends JPanel
 	private static final long serialVersionUID = 1L;
 	
 	//Game Background
-	private final int BACKGROUND_WIDTH 	= Arcade.fullScreen.width / 2;
-	private final int BACKGROUND_HEIGHT  = (Arcade.fullScreen.height / 6) * 5;
-	private final int BACKGROUND_X 		= Arcade.fullScreen.width / 4;
-	private final int BACKGROUND_Y 		= Arcade.fullScreen.height / 12;
-	
+	private final int BACKGROUND_WIDTH 	      = Arcade.fullScreen.width / 2;              //Background width
+	private final int BACKGROUND_HEIGHT       = (Arcade.fullScreen.height / 6) * 5;       //Background height
+	private final int BACKGROUND_X 		      = Arcade.fullScreen.width / 4;              //Background Y pos
+	private final int BACKGROUND_Y 		      = Arcade.fullScreen.height / 12;            //Background X pos
+	   
 	//Game Board
-	private final int ROWS 			= 4;
-	private final int COLS 			= 4;
-	private final int SPACING 		= 10;
-	private final int BOARD_HEIGHT 	= (COLS + 1) * SPACING + COLS * Tile.WIDTH;
-	private final int BOARD_WIDTH 	= (ROWS + 1) * SPACING + ROWS * Tile.WIDTH;
-	private Tile[][] tiles = new Tile[4][4];;   //2D Array of all the Tile objects
+	private final int ROWS 			= 4;                                                   //Amount of rows
+	private final int COLS 			= 4;                                                   //Amount of cols
+	private final int SPACING 		= 10;                                                  //Final int used for spacing
+	private final int BOARD_HEIGHT 	= (COLS + 1) * SPACING + COLS * Tile.WIDTH;            //Height of the gameboard
+	private final int BOARD_WIDTH 	= (ROWS + 1) * SPACING + ROWS * Tile.WIDTH;            //Width of the gameboard
+	private BufferedImage gameBoard;                                                       //BufferedImage of the gameboard
+	private int gameBoardX = (BACKGROUND_X + (BACKGROUND_WIDTH / 2)) - (BOARD_WIDTH / 2);  //X position of gameboard
+	private int gameBoardY = BACKGROUND_Y * 4;                                             //Y position of gameboard
 	
-	private BufferedImage gameBoard;
-	private int gameBoardX = (BACKGROUND_X + (BACKGROUND_WIDTH / 2)) - (BOARD_WIDTH / 2);;
-	private int gameBoardY = BACKGROUND_Y * 4;
+	//Tiles
+	private Tile[][] tiles          = new Tile[4][4];                                      //2D Array of all the Tile objects
 	
 	//Constructor
 	public Twenty48Panel()
@@ -60,6 +61,7 @@ public class Twenty48Panel extends JPanel
 		drawGameBoard();
 	}
 
+	//Draws the gameboard and tiles
 	private void drawGameBoard()
 	{
 		gameBoard = new BufferedImage(BOARD_WIDTH, BOARD_HEIGHT, BufferedImage.TYPE_INT_ARGB);
@@ -77,9 +79,10 @@ public class Twenty48Panel extends JPanel
         }
 	}
 	
+	//Creates an empty board, then puts two random tiles
 	public void restart()
 	{
-        for(int row = 0; row < 4; row++)
+        for(int row = 0; row < 4; row++)    //Loops through all tiles
         {
             for(int col = 0; col < 4; col ++)
             {
@@ -93,60 +96,66 @@ public class Twenty48Panel extends JPanel
         putRandomTile();
 	}
 	
+	//Moves tiles right
 	public void moveLeft()
 	{
-	    System.out.println("Move Left");
-        for(int row = 3; row > -1; row--)
+        for(int row = 3; row > -1; row--)   //Loops through all tiles starting from the bottom right of the array
         {
             for(int col = 3; col > -1; col --)
             {
-                if(col != 0) addTiles(tiles[row][col - 1], tiles[row][col]);
+                if(col != 0) 
+                    addTiles(tiles[row][col - 1], tiles[row][col], row, col, "left");
             }
         }
 	}
 	
+	//Moves tiles right
 	public void moveRight()
 	{
-	    System.out.println("Move Right");
-        for(int row = 0; row < 4; row++)
+        for(int row = 0; row < 4; row++)    //Loops through all tiles starting from the top left of array
         {
             for(int col = 0; col < 4 ; col++)
             {
-                if(col != 3) addTiles(tiles[row][col + 1], tiles[row][col]);
+                if(col != 3) 
+                    addTiles(tiles[row][col + 1], tiles[row][col], row, col, "right");
             }
         }
 	}
 	
-	public void moveUp()
+	//Moves tiles up
+	public void moveUp()   
 	{
-	    System.out.println("Move Up");
-        for(int col = 3; col > -1; col--)
+        for(int col = 3; col > -1; col--)   //Loops through all tiles starting from bottom right of array
         {
             for(int row = 3; row > -1 ; row--)
             {
-                if(row != 0) addTiles(tiles[row - 1][col], tiles[row][col]);
+                if(row != 0) 
+                    addTiles(tiles[row - 1][col], tiles[row][col], row, col, "up");
             }
         }
 	}
 	
+	//Moves tiles down
 	public void moveDown()
 	{
-	       System.out.println("Move Down");
-	       for(int col = 0; col < 4; col++)
+	       for(int col = 0; col < 4; col++)    // Loops though all tiles starting from the top right of array
 	       {
 	           for(int row = 0; row < 4; row++)
 	           {
-	               if(row != 3) addTiles(tiles[row + 1][col], tiles[row][col]);
+	              if(row != 3) 
+	                  addTiles(tiles[row + 1][col], tiles[row][col], row, col, "down");
 	           }
 	       }
 	}
 	
-	public boolean addTiles(Tile addTo, Tile toBeAdded)
+	//This does the checking for adding and moving into empty space
+	public boolean addTiles(Tile addTo, Tile toBeAdded, int row, int col, String direction)
 	{   
 	    if(addTo.getValue() == 0)
 	    {
 	        addTo.setValue(toBeAdded.getValue());
 	        toBeAdded.setValue(0);
+	        
 	    }
 	    if(addTo.getValue() == toBeAdded.getValue())
 	    {
@@ -156,9 +165,12 @@ public class Twenty48Panel extends JPanel
 	    }
 	    else return false;
 	}
-	
+		
+	//Prints the numbers in the console
 	public void printBoard()
 	{
+	    System.out.println();
+	    System.out.println("Current");
         for(int row = 0; row < 4; row++)
         {
             System.out.println();
@@ -170,19 +182,36 @@ public class Twenty48Panel extends JPanel
             System.out.print("]");
         }
 	}
-	
+		
+	//Puts a 2 or a 4 in a random spot on the board
 	public void putRandomTile()
 	{
 	    int row = getRandomSpot();
 	    int col = getRandomSpot();
 	    
-	    if(tiles[row][col].getValue() == 0)
-	        tiles[row][col].setValue(getRandomTileNum());
-	    else
-	        putRandomTile();
-	    
+	    if(!isGridFull())
+    	    if(tiles[row][col].getValue() == 0)
+    	        tiles[row][col].setValue(getRandomTileNum());
+    	    else
+    	        putRandomTile(); 
 	}
 	
+	//Checks if the grid id full
+	public boolean isGridFull()
+    {
+        int amount = 0;
+        for(int row = 0; row < ROWS; row++)
+        {
+            for(int col = 0; col < COLS; col ++)
+            {
+                if(tiles[row][col].getValue() > 0)
+                    amount++;
+            }
+        }
+        return (amount == 16);
+    }
+	
+	//Returns a 2 or a 4
 	public int getRandomTileNum()
 	{
         int random;
@@ -208,6 +237,7 @@ public class Twenty48Panel extends JPanel
         return tile;
 	}
 	
+	//Returns a random number in range 0, 3
 	public int getRandomSpot()
 	{
 	    return (int)(Math.random() * 4);
@@ -215,42 +245,8 @@ public class Twenty48Panel extends JPanel
 	
 	private class Twenty48Handler implements KeyListener, MouseListener
 	{
-
-		public void mouseClicked(MouseEvent e)
-		{
-
-		}
-
-		public void mousePressed(MouseEvent e)
-		{
-
-		}
-
-		public void mouseReleased(MouseEvent e)
-		{
-
-		}
-
-		public void mouseEntered(MouseEvent e)
-		{
-
-		}
-
-		public void mouseExited(MouseEvent e)
-		{
-
-		}
-
-		public void keyTyped(KeyEvent e)
-		{
-
-		}
-
 		public void keyPressed(KeyEvent e)
 		{
-		    printBoard();
-		    putRandomTile();
-		    System.out.println(getRandomSpot());
 		    switch(e.getKeyCode())
 		    {
 		        case(KeyEvent.VK_LEFT):
@@ -266,12 +262,22 @@ public class Twenty48Panel extends JPanel
 		            moveDown();
 		            break;
 		    }
+		    
+		    putRandomTile();
 		}
 
-		public void keyReleased(KeyEvent e)
-		{
+		public void keyReleased(KeyEvent e) {}
 
-		}
+        public void mouseClicked(MouseEvent e) {}
 
+        public void mousePressed(MouseEvent e) {}
+
+        public void mouseReleased(MouseEvent e) {}
+
+        public void mouseEntered(MouseEvent e) {}
+
+        public void mouseExited(MouseEvent e) {}        
+
+        public void keyTyped(KeyEvent e) {}
 	}
 }
