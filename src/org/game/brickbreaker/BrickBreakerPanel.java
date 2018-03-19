@@ -31,8 +31,8 @@ public class BrickBreakerPanel extends JPanel
     //Ball variables
     private static final int BALL_WIDTH = 20;
     private static final int BALL_HEIGHT = 20;
-    private static int ballYPos = (PADDLE_Y_POS - BALL_HEIGHT);
-    private static int ballXPos = (paddleXPos + PADDLE_WIDTH / 2 - BALL_WIDTH / 2);
+    private int ballYPos = (PADDLE_Y_POS - BALL_HEIGHT);
+    private int ballXPos = (paddleXPos + PADDLE_WIDTH / 2 - BALL_WIDTH / 2);
     private int ballXDir;
     private int ballYDir;
     private boolean ballMoving = false;
@@ -57,16 +57,30 @@ public class BrickBreakerPanel extends JPanel
     		                ballXDir *= -1;
     		            }
     		            
-    				 if(ballYPos + BALL_HEIGHT > PADDLE_Y_POS && ballXPos + BALL_WIDTH + 1 > paddleXPos && ballXPos - 1 < paddleXPos + PADDLE_WIDTH)
+    				 if(ballYPos + BALL_HEIGHT > PADDLE_Y_POS && ballXPos + BALL_WIDTH + 1 > paddleXPos && 
+    						 ballXPos - 1 < paddleXPos + PADDLE_WIDTH ||
+    						 ballYPos < Y_POS + 10)
                      {
                          ballYDir *= -1;
                      }
-    				 
-    		            if(ballYPos < Y_POS + 10)
-    		            {
-    		                ballYDir *= -1;
-    		            }
-    		            
+    		          
+    				 	for(int rows = 0; rows < ROWS; rows++)
+    			        {
+    			            for (int cols = 0; cols < COLS; cols++)
+    			            {
+    			                if(ballYPos < brickList[rows][cols].getY() + brickList[rows][cols].HEIGHT &&
+    			                		ballXPos + BALL_WIDTH / 2 > brickList[rows][cols].getX() && 
+    			                		ballXPos + BALL_WIDTH / 2< brickList[rows][cols].getX() + brickList[rows][cols].WIDTH &&
+    			                		brickList[rows][cols].getLives() > 0)
+    			                {
+    			                	ballYDir *= -1;
+    			                	brickList[rows][cols].setLives(1);
+    			                	
+    			                	System.out.print("Row:  " + rows + "  Column:  " + cols + "  Lives:  ");
+    			                	System.out.println(brickList[rows][cols].getLives());
+    			                }
+    			            }
+    			        }
     		            
     		            if(ballYPos + BALL_HEIGHT > Y_POS + BORDER_HEIGHT - 10)
     		            {
@@ -79,8 +93,9 @@ public class BrickBreakerPanel extends JPanel
     
     private static final long serialVersionUID = 1L;
     
+    							//......................CCONSTRUCTOR METHOD........................
     
-    public BrickBreakerPanel()  //Constructor
+    public BrickBreakerPanel()  
     {
         BrickBreakerHandler handler = new BrickBreakerHandler(); //creates a handler for brick breaker game
         addKeyListener(handler);
@@ -98,25 +113,34 @@ public class BrickBreakerPanel extends JPanel
             {
                 int x = SPACING + SPACING * cols + Bricks.WIDTH * cols + X_POS + 10;
                 int y = SPACING + SPACING * rows + Bricks.HEIGHT * rows + Y_POS + Bricks.HEIGHT * 2;
-                brickList[rows][cols] = new Bricks(x, y, 1, 0);
+                brickList[rows][cols] = new Bricks(x, y, 3, 0);
             }
         }
         
      
     }
     
+    							//.........................BALL METHODS.............................
     
     private void setBallMoving(boolean moving)
     {
         ballMoving = moving;
     }
     
+    //starts the timer that moves the ball on the screen
     private void moveBall() 
     {
         	timer.scheduleAtFixedRate(task, 13, 13);
-           
+    }
+    
+    private void hitDetection()
+    {
+    	
     }
 
+    
+    							//.......................GRAPHICS METHODS...........................
+    
     protected void paintComponent(Graphics g)
     {
         super.paintComponent(g); //Repaint super JPanel
@@ -133,10 +157,6 @@ public class BrickBreakerPanel extends JPanel
         g.setColor(Color.gray);
         g.fillRoundRect(paddleXPos, PADDLE_Y_POS, PADDLE_WIDTH, PADDLE_HEIGHT, 10, 10);
         
-        //draws the ball in red color
-        g.setColor(Color.red);
-        g.fillOval(ballXPos, ballYPos, BALL_WIDTH, BALL_HEIGHT);
-        
         //draw the array list of buffered images containing all the bricks
         for(int rows = 0; rows < ROWS; rows++)
         {
@@ -146,7 +166,13 @@ public class BrickBreakerPanel extends JPanel
                 
             }
         }
+        
+        //draws the ball in red color
+        g.setColor(Color.red);
+        g.fillOval(ballXPos, ballYPos, BALL_WIDTH, BALL_HEIGHT);
     }
+    
+    
     
     private class BrickBreakerHandler implements KeyListener, MouseListener, MouseMotionListener
     {
@@ -156,12 +182,13 @@ public class BrickBreakerPanel extends JPanel
 
         }
 
-        
+        // starts the game by moving the ball and letting the user to control the paddle
         public void keyPressed(KeyEvent e)
         {
             switch(e.getKeyCode())
             {
                 case(KeyEvent.VK_SPACE):
+                	
                     if(!ballMoving)
                     {
                         ballMoving = true;
@@ -172,18 +199,21 @@ public class BrickBreakerPanel extends JPanel
             }
         }
         
+        //This methods makes the paddle move with the mouse cursor
         @Override
         public void mouseMoved(MouseEvent e) 
         {
             mouseX = e.getX(); //sets a variable to the x position of the mouse
+            if(ballMoving)
+            {
+            	if(mouseX < X_POS + 10 + PADDLE_WIDTH / 2)  //makes sure the paddle doesn't go past the border on the left side
+            		paddleXPos = X_POS + 10;
+            	else
+            		paddleXPos = mouseX - PADDLE_WIDTH / 2;
             
-            if(mouseX < X_POS + 10 + PADDLE_WIDTH / 2)  //makes sure the paddle doesn't go past the border on the left side
-                paddleXPos = X_POS + 10 + PADDLE_WIDTH / 2;
-            else
-                paddleXPos = mouseX - PADDLE_WIDTH / 2;
-            
-            if(mouseX > X_POS + BORDER_WIDTH - 10 - PADDLE_WIDTH / 2) //makes sure the paddle doesn't go past the border on the right side
-                paddleXPos = X_POS + BORDER_WIDTH - 10- PADDLE_WIDTH / 2;
+            	if(mouseX > X_POS + BORDER_WIDTH - 10 - PADDLE_WIDTH) //makes sure the paddle doesn't go past the border on the right side
+            		paddleXPos = X_POS + BORDER_WIDTH - 10- PADDLE_WIDTH;
+            }
         }
         
         

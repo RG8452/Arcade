@@ -10,6 +10,7 @@ public class Bricks {
     private int y;
     private int lives;
     private int type;
+    private int livesDecrease = 0;
     private BufferedImage brickImage;
     public static final int WIDTH = 54;
     public static final int HEIGHT = 20;
@@ -20,9 +21,8 @@ public class Bricks {
     {
         this.x = x;
         this.y = y;
-        this.lives = lives;
+        this.lives = lives;	
         this.type = type;
-        
         brickImage = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
         drawBrick();
     }
@@ -31,9 +31,28 @@ public class Bricks {
     private void drawBrick() //a method that draws a brick onto the buffered image
     {
         Graphics g = brickImage.getGraphics();
+        if (lives == 3)
+        {
+        	g.setColor(Color.cyan);
+        	g.fillRect(0, 0, WIDTH, HEIGHT);
+        }
+        if (lives == 2)
+        {
+        	g.setColor(Color.green);
+        	g.fillRect(0, 0, WIDTH, HEIGHT);
+        }
+        if(lives == 1)
+        {
+        	g.setColor(Color.YELLOW);
+        	g.fillRect(0, 0, WIDTH, HEIGHT);
+        }
         
-        g.setColor(Color.YELLOW);
-        g.fillRect(0, 0, WIDTH, HEIGHT);
+        if(lives == 0)
+        {
+        	g.setColor(Color.black);
+        	g.fillRect(0, 0, WIDTH, HEIGHT);
+        }
+        
     }
     
     public void drawBrickImage(Graphics g) //draws the buffered image
@@ -49,6 +68,12 @@ public class Bricks {
     public int getY()
     {
         return y;
+    }
+    
+    public void setLives(int hits)
+    {
+    	this.lives -= hits;
+    	drawBrick();
     }
     
     public int getLives()
