@@ -27,24 +27,22 @@ public class BrickBreakerPanel extends JPanel
     private static final int PADDLE_HEIGHT = 15;
     private static int paddleXPos = (X_POS + BORDER_WIDTH / 2 - (PADDLE_WIDTH / 2));
     private static final int PADDLE_Y_POS = (Y_POS + BORDER_HEIGHT - 30 - (PADDLE_HEIGHT / 2));;
+    private int mouseX = paddleXPos;
     
     //Ball variables
-    private static final int BALL_WIDTH = 20;
-    private static final int BALL_HEIGHT = 20;
-    private int ballYPos = (PADDLE_Y_POS - BALL_HEIGHT);
-    private int ballXPos = (paddleXPos + PADDLE_WIDTH / 2 - BALL_WIDTH / 2);
+    private int ballX = paddleXPos + PADDLE_WIDTH / 2 - Ball.WIDTH / 2;
+    private int ballY = PADDLE_Y_POS - Ball.WIDTH;
     private int ballXDir;
     private int ballYDir;
     private boolean ballMoving = false;
-    
     //bricks variables
     private static final int SPACING = 5;
     private static final int ROWS = 15;
     private static final int COLS = 25;
-    private int mouseX = paddleXPos;
+    
     
     //Ball timer
-    Timer timer = new Timer();
+  /*  Timer timer = new Timer();
     TimerTask task = new TimerTask()
     		{
     			public void run()
@@ -69,8 +67,9 @@ public class BrickBreakerPanel extends JPanel
     			            for (int cols = 0; cols < COLS; cols++)
     			            {
     			                if(ballYPos < brickList[rows][cols].getY() + brickList[rows][cols].HEIGHT &&
-    			                		ballXPos + BALL_WIDTH / 2 > brickList[rows][cols].getX() && 
-    			                		ballXPos + BALL_WIDTH / 2< brickList[rows][cols].getX() + brickList[rows][cols].WIDTH &&
+    			                        ballYPos + BALL_HEIGHT > brickList[rows][cols].getY() &&
+    			                		ballXPos + BALL_WIDTH > brickList[rows][cols].getX() && 
+    			                		ballXPos + BALL_WIDTH < brickList[rows][cols].getX() + brickList[rows][cols].WIDTH &&
     			                		brickList[rows][cols].getLives() > 0)
     			                {
     			                	ballYDir *= -1;
@@ -87,9 +86,10 @@ public class BrickBreakerPanel extends JPanel
     		            	timer.cancel();
     		            }
     			}
-    		};
+    		};*/
     		
     private Bricks[][] brickList = new Bricks[ROWS][COLS];//creates an array of type Bricks
+    private Ball ball = new Ball(ballX, ballY, ballXDir, ballYDir, 3, false, 0);
     
     private static final long serialVersionUID = 1L;
     
@@ -111,9 +111,9 @@ public class BrickBreakerPanel extends JPanel
         {
             for (int cols = 0; cols < COLS; cols++)
             {
-                int x = SPACING + SPACING * cols + Bricks.WIDTH * cols + X_POS + 10;
-                int y = SPACING + SPACING * rows + Bricks.HEIGHT * rows + Y_POS + Bricks.HEIGHT * 2;
-                brickList[rows][cols] = new Bricks(x, y, 3, 0);
+                int x = cols + Bricks.WIDTH * cols + X_POS + 10;
+                int y = rows + Bricks.HEIGHT * rows + Y_POS + Bricks.HEIGHT * 2;
+                brickList[rows][cols] = new Bricks(x, y, 1, 0);
             }
         }
         
@@ -122,22 +122,10 @@ public class BrickBreakerPanel extends JPanel
     
     							//.........................BALL METHODS.............................
     
-    private void setBallMoving(boolean moving)
+    public void moveBall()
     {
-        ballMoving = moving;
+        
     }
-    
-    //starts the timer that moves the ball on the screen
-    private void moveBall() 
-    {
-        	timer.scheduleAtFixedRate(task, 13, 13);
-    }
-    
-    private void hitDetection()
-    {
-    	
-    }
-
     
     							//.......................GRAPHICS METHODS...........................
     
@@ -162,14 +150,12 @@ public class BrickBreakerPanel extends JPanel
         {
             for (int cols = 0; cols < COLS; cols++)
             {
-                brickList[rows][cols].drawBrickImage(g);
-                
+                brickList[rows][cols].drawBrickImage(g); 
             }
         }
         
         //draws the ball in red color
-        g.setColor(Color.red);
-        g.fillOval(ballXPos, ballYPos, BALL_WIDTH, BALL_HEIGHT);
+        ball.drawBallImage(g);
     }
     
     
@@ -194,7 +180,7 @@ public class BrickBreakerPanel extends JPanel
                         ballMoving = true;
                         ballXDir = (int) (Math.random() * 10 + (-5));
                         ballYDir = -5;
-                        moveBall();
+                        ball.moveBall();
                     }
             }
         }
