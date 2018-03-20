@@ -32,9 +32,8 @@ public class BrickBreakerPanel extends JPanel
     //Ball variables
     private int ballX = paddleXPos + PADDLE_WIDTH / 2 - Ball.WIDTH / 2;
     private int ballY = PADDLE_Y_POS - Ball.WIDTH;
-    private int ballXDir;
-    private int ballYDir;
     private boolean ballMoving = false;
+    
     //bricks variables
     private static final int SPACING = 5;
     private static final int ROWS = 15;
@@ -89,7 +88,7 @@ public class BrickBreakerPanel extends JPanel
     		};*/
     		
     private Bricks[][] brickList = new Bricks[ROWS][COLS];//creates an array of type Bricks
-    private Ball ball = new Ball(ballX, ballY, ballXDir, ballYDir, 3, false, 0);
+    private Ball ball = new Ball(ballX, ballY, 3, 0);
     
     private static final long serialVersionUID = 1L;
     
@@ -178,8 +177,8 @@ public class BrickBreakerPanel extends JPanel
                     if(!ballMoving)
                     {
                         ballMoving = true;
-                        ballXDir = (int) (Math.random() * 10 + (-5));
-                        ballYDir = -5;
+                        ball.setXdir((int) (Math.random() * 10 + (-5)));
+                        ball.setYdir(-5);
                         ball.moveBall();
                     }
             }
@@ -197,7 +196,7 @@ public class BrickBreakerPanel extends JPanel
             	else
             		paddleXPos = mouseX - PADDLE_WIDTH / 2;
             
-            	if(mouseX > X_POS + BORDER_WIDTH - 10 - PADDLE_WIDTH) //makes sure the paddle doesn't go past the border on the right side
+            	if(mouseX > X_POS + BORDER_WIDTH - 10 - PADDLE_WIDTH / 2) //makes sure the paddle doesn't go past the border on the right side
             		paddleXPos = X_POS + BORDER_WIDTH - 10- PADDLE_WIDTH;
             }
         }
