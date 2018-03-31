@@ -2,13 +2,12 @@ package org.game.brickbreaker;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import javax.swing.JPanel;
 
@@ -17,16 +16,17 @@ import org.Arcade;
 public class BrickBreakerPanel extends JPanel
 {
     //Border variables
-    private static final int  BORDER_HEIGHT = 850;
-    private static final int BORDER_WIDTH = 1500;
-    private static final int X_POS = (int) ((Arcade.fullScreen.getWidth()) / 2 - (BORDER_WIDTH / 2));
-    private static final int Y_POS = (int) ((Arcade.fullScreen.getHeight()) / 2 - (BORDER_HEIGHT / 2));
+    public static final int  BORDER_HEIGHT = 850;
+    public static final int BORDER_WIDTH = 1500;
+    public static final int X_POS = (int) ((Arcade.fullScreen.getWidth()) / 2 - (BORDER_WIDTH / 2));
+    public static final int Y_POS = (int) ((Arcade.fullScreen.getHeight()) / 2 - (BORDER_HEIGHT / 2));
     
     //Paddle variables
     private static final int PADDLE_WIDTH = 100;
     private static final int PADDLE_HEIGHT = 15;
     private static int paddleXPos = (X_POS + BORDER_WIDTH / 2 - (PADDLE_WIDTH / 2));
-    private static final int PADDLE_Y_POS = (Y_POS + BORDER_HEIGHT - 30 - (PADDLE_HEIGHT / 2));;
+    private static final int PADDLE_Y_POS = (Y_POS + BORDER_HEIGHT - 30 - (PADDLE_HEIGHT / 2));
+    public static Rectangle hitbox = new Rectangle(paddleXPos, PADDLE_Y_POS, PADDLE_WIDTH, PADDLE_HEIGHT);
     private int mouseX = paddleXPos;
     
     //Ball variables
@@ -36,58 +36,10 @@ public class BrickBreakerPanel extends JPanel
     
     //bricks variables
     private static final int SPACING = 5;
-    private static final int ROWS = 15;
-    private static final int COLS = 25;
-    
-    
-    //Ball timer
-  /*  Timer timer = new Timer();
-    TimerTask task = new TimerTask()
-    		{
-    			public void run()
-    			{
-    				ballXPos += ballXDir;;
-    				ballYPos += ballYDir;
-    				
-    				 if(ballXPos + BALL_WIDTH > X_POS + BORDER_WIDTH - 10 || ballXPos < X_POS + 10)
-    		            {
-    		                ballXDir *= -1;
-    		            }
-    		            
-    				 if(ballYPos + BALL_HEIGHT > PADDLE_Y_POS && ballXPos + BALL_WIDTH + 1 > paddleXPos && 
-    						 ballXPos - 1 < paddleXPos + PADDLE_WIDTH ||
-    						 ballYPos < Y_POS + 10)
-                     {
-                         ballYDir *= -1;
-                     }
-    		          
-    				 	for(int rows = 0; rows < ROWS; rows++)
-    			        {
-    			            for (int cols = 0; cols < COLS; cols++)
-    			            {
-    			                if(ballYPos < brickList[rows][cols].getY() + brickList[rows][cols].HEIGHT &&
-    			                        ballYPos + BALL_HEIGHT > brickList[rows][cols].getY() &&
-    			                		ballXPos + BALL_WIDTH > brickList[rows][cols].getX() && 
-    			                		ballXPos + BALL_WIDTH < brickList[rows][cols].getX() + brickList[rows][cols].WIDTH &&
-    			                		brickList[rows][cols].getLives() > 0)
-    			                {
-    			                	ballYDir *= -1;
-    			                	brickList[rows][cols].setLives(1);
-    			                	
-    			                	System.out.print("Row:  " + rows + "  Column:  " + cols + "  Lives:  ");
-    			                	System.out.println(brickList[rows][cols].getLives());
-    			                }
-    			            }
-    			        }
-    		            
-    		            if(ballYPos + BALL_HEIGHT > Y_POS + BORDER_HEIGHT - 10)
-    		            {
-    		            	timer.cancel();
-    		            }
-    			}
-    		};*/
+    public static final int ROWS = 15;
+    public static final int COLS = 25;
     		
-    private Bricks[][] brickList = new Bricks[ROWS][COLS];//creates an array of type Bricks
+    public static Bricks[][] brickList = new Bricks[ROWS][COLS];//creates an array of type Bricks
     private Ball ball = new Ball(ballX, ballY, 3, 0);
     
     private static final long serialVersionUID = 1L;
@@ -104,14 +56,13 @@ public class BrickBreakerPanel extends JPanel
         setBackground(Color.green); //sets background color to green
         
         
-        
         //adds all the objects to the array
         for(int rows = 0; rows < ROWS; rows++)
         {
             for (int cols = 0; cols < COLS; cols++)
             {
-                int x = cols + Bricks.WIDTH * cols + X_POS + 10;
-                int y = rows + Bricks.HEIGHT * rows + Y_POS + Bricks.HEIGHT * 2;
+                int x = SPACING + SPACING * cols + Bricks.WIDTH * cols + X_POS + 10;
+                int y = SPACING + SPACING * rows + Bricks.HEIGHT * rows + Y_POS + Bricks.HEIGHT * 2;
                 brickList[rows][cols] = new Bricks(x, y, 1, 0);
             }
         }
@@ -120,11 +71,7 @@ public class BrickBreakerPanel extends JPanel
     }
     
     							//.........................BALL METHODS.............................
-    
-    public void moveBall()
-    {
-        
-    }
+
     
     							//.......................GRAPHICS METHODS...........................
     
@@ -154,8 +101,9 @@ public class BrickBreakerPanel extends JPanel
         }
         
         //draws the ball in red color
-        ball.drawBallImage(g);
+        ball.drawBall(g);
     }
+    
     
     
     
@@ -198,6 +146,8 @@ public class BrickBreakerPanel extends JPanel
             
             	if(mouseX > X_POS + BORDER_WIDTH - 10 - PADDLE_WIDTH / 2) //makes sure the paddle doesn't go past the border on the right side
             		paddleXPos = X_POS + BORDER_WIDTH - 10- PADDLE_WIDTH;
+            	
+            	hitbox.setLocation(paddleXPos, PADDLE_Y_POS);
             }
         }
         
