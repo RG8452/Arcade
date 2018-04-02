@@ -26,8 +26,13 @@ public class BrickBreakerPanel extends JPanel
     private static final int PADDLE_HEIGHT = 15;
     private static int paddleXPos = (X_POS + BORDER_WIDTH / 2 - (PADDLE_WIDTH / 2));
     private static final int PADDLE_Y_POS = (Y_POS + BORDER_HEIGHT - 30 - (PADDLE_HEIGHT / 2));
-    public static Rectangle hitbox = new Rectangle(paddleXPos, PADDLE_Y_POS, PADDLE_WIDTH, PADDLE_HEIGHT);
     private int mouseX = paddleXPos;
+    
+    public static Rectangle leftPaddleHitbox = new Rectangle(paddleXPos, PADDLE_Y_POS, PADDLE_WIDTH / 5 , PADDLE_HEIGHT);
+    public static Rectangle leftMiddlePaddleHitbox = new Rectangle((paddleXPos + PADDLE_WIDTH / 5), PADDLE_Y_POS, PADDLE_WIDTH / 5, PADDLE_HEIGHT);
+    public static Rectangle centerPaddleHitbox = new Rectangle((paddleXPos + PADDLE_WIDTH / 5) * 2, PADDLE_Y_POS, PADDLE_WIDTH / 5, PADDLE_HEIGHT);
+    public static Rectangle rightMiddlePaddleHitbox = new Rectangle((paddleXPos + PADDLE_WIDTH / 5) * 3, PADDLE_Y_POS, PADDLE_WIDTH / 5, PADDLE_HEIGHT);
+    public static Rectangle rightPaddleHitbox = new Rectangle((PADDLE_WIDTH / 5) * 4, PADDLE_Y_POS, PADDLE_WIDTH / 5, PADDLE_HEIGHT);
     
     //Ball variables
     private int ballX = paddleXPos + PADDLE_WIDTH / 2 - Ball.WIDTH / 2;
@@ -91,6 +96,13 @@ public class BrickBreakerPanel extends JPanel
         g.setColor(Color.gray);
         g.fillRoundRect(paddleXPos, PADDLE_Y_POS, PADDLE_WIDTH, PADDLE_HEIGHT, 10, 10);
         
+        g.setColor(Color.blue);
+        g.drawRect(leftPaddleHitbox.x, leftPaddleHitbox.y, leftPaddleHitbox.width, leftPaddleHitbox.height);
+        g.drawRect(leftMiddlePaddleHitbox.x, leftMiddlePaddleHitbox.y, leftMiddlePaddleHitbox.width, leftMiddlePaddleHitbox.height);
+        g.drawRect(centerPaddleHitbox.x, centerPaddleHitbox.y, centerPaddleHitbox.width, centerPaddleHitbox.height);
+        g.drawRect(rightMiddlePaddleHitbox.x, rightMiddlePaddleHitbox.y, rightMiddlePaddleHitbox.width, rightMiddlePaddleHitbox.height);
+        g.drawRect(rightPaddleHitbox.x, rightPaddleHitbox.y, rightPaddleHitbox.width, rightPaddleHitbox.height);
+        
         //draw the array list of buffered images containing all the bricks
         for(int rows = 0; rows < ROWS; rows++)
         {
@@ -147,7 +159,11 @@ public class BrickBreakerPanel extends JPanel
             	if(mouseX > X_POS + BORDER_WIDTH - 10 - PADDLE_WIDTH / 2) //makes sure the paddle doesn't go past the border on the right side
             		paddleXPos = X_POS + BORDER_WIDTH - 10- PADDLE_WIDTH;
             	
-            	hitbox.setLocation(paddleXPos, PADDLE_Y_POS);
+            	leftPaddleHitbox.setLocation(paddleXPos, PADDLE_Y_POS);
+            	leftMiddlePaddleHitbox.setLocation(paddleXPos + (PADDLE_WIDTH / 5), PADDLE_Y_POS);
+            	centerPaddleHitbox.setLocation(paddleXPos + (PADDLE_WIDTH / 5) * 2, PADDLE_Y_POS);
+            	rightMiddlePaddleHitbox.setLocation(paddleXPos + (PADDLE_WIDTH / 5) * 3, PADDLE_Y_POS);
+            	rightPaddleHitbox.setLocation(paddleXPos + (PADDLE_WIDTH / 5) * 4, PADDLE_Y_POS);
             }
         }
         

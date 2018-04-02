@@ -14,21 +14,22 @@ public class Ball
     private int type;
     private int xDir;
     private int yDir;
-    private static int paddleX;
-    private static int paddleY;
-    private static int paddleWidth;
-    private static int paddleHeight;
+    
     
     
     public static final int WIDTH = 20;
     public static final int HEIGHT = 20;
-    public Rectangle hitbox = new Rectangle(x, y, WIDTH, HEIGHT);
+    
+    public Rectangle verticalHitbox = new Rectangle(x + WIDTH /2 - 3, y, 6, HEIGHT);
+    public Rectangle horizontalHitbox = new Rectangle(x, y - HEIGHT / 2 - 3, WIDTH, 6);
     
     
     private static final int LEFT_BOUNDARY = BrickBreakerPanel.X_POS + 10;
     private static final int RIGHT_BOUNDARY = BrickBreakerPanel.X_POS + BrickBreakerPanel.BORDER_WIDTH - 10;
     private static final int TOP_BOUNDARY = BrickBreakerPanel.Y_POS + 10;
     private static final int BOTTOM_BOUNDARY = BrickBreakerPanel.Y_POS + BrickBreakerPanel.BORDER_HEIGHT - 10;
+    
+    
     
     
     public Ball(int x, int y, int lives, int type)
@@ -47,7 +48,8 @@ public class Ball
                 {
                     x += xDir;
                     y += yDir;
-                    hitbox.setLocation(x, y);;
+                    verticalHitbox.setLocation(x + WIDTH / 2 - 3, y);;
+                    horizontalHitbox.setLocation(x, y + HEIGHT / 2 - 3);
                     
                     checkBoundaries();
                 }
@@ -64,16 +66,53 @@ public class Ball
         if(y + HEIGHT > BOTTOM_BOUNDARY)
             timer.cancel();
         
-        if(hitbox.intersects(BrickBreakerPanel.hitbox))
+        if(verticalHitbox.intersects(BrickBreakerPanel.leftPaddleHitbox))
+        {
+            yDir = (yDir *-1);
+            xDir -= 1;
+            System.out.println(xDir);
+        }
+        
+        if(verticalHitbox.intersects(BrickBreakerPanel.leftMiddlePaddleHitbox))
+        {
+            yDir = (yDir *-1);
+            xDir -= 2;
+            System.out.println(xDir);
+        }
+        
+        if(verticalHitbox.intersects(BrickBreakerPanel.centerPaddleHitbox))
             yDir *= -1;
         
+        if(verticalHitbox.intersects(BrickBreakerPanel.rightMiddlePaddleHitbox))
+        {
+            yDir = (yDir *-1);
+            xDir += 1;
+            System.out.println(xDir);
+        }
+        
+        if(verticalHitbox.intersects(BrickBreakerPanel.rightPaddleHitbox))
+        {
+            yDir = (yDir *-1);
+            xDir += 2;
+            System.out.println(xDir);
+        }
+        
+        
+        //checks if ball hit one of the bricks
         for(Bricks[] b: BrickBreakerPanel.brickList)
         {
             for(Bricks bb: b)
             {
-                if(hitbox.intersects(bb.hitbox) && bb.getLives() > 0)
+                if(verticalHitbox.intersects(bb.hitbox) && bb.getLives() > 0)
                 {
                     yDir *= -1;
+                    bb.subtractLives(1);
+                    return;
+                }
+                
+                if(horizontalHitbox.intersects(bb.hitbox) && bb.getLives() > 0)
+                {
+                	xDir *= -1;
                     bb.subtractLives(1);
                     return;
                 }
@@ -83,13 +122,17 @@ public class Ball
     
     public void moveBall()
     {
-        timer.scheduleAtFixedRate(task, 13, 13);
+        timer.scheduleAtFixedRate(task, 20, 20);
     }
     
     public void drawBall(Graphics g)
     {
         g.setColor(Color.red);
         g.fillOval(x, y, WIDTH, HEIGHT);
+        
+        g.setColor(Color.blue);
+        g.drawRect(verticalHitbox.x, verticalHitbox.y, verticalHitbox.width, verticalHitbox.height);
+        g.drawRect(horizontalHitbox.x, horizontalHitbox.y, horizontalHitbox.width, horizontalHitbox.height);
     }
     
     
